@@ -44,7 +44,13 @@ clean:
 $(APP).o: $(APP).c
 	$(CC) -c $(CFLAGS) $(DEFINES) $<
 
-OBJ_FILES =  $(APP).o 
+pmu-and-marker.o: pmu-and-marker.c
+	$(CC) -c $(CFLAGS) $(DEFINES) -DM55 $<
+
+pmu_M.o: pmu_M.c
+	$(CC) -c $(CFLAGS) $(DEFINES) $<
+
+OBJ_FILES =  $(APP).o pmu_M.o pmu-and-marker.o
     
 # add hardware specific CPU_CFLAGS and CPU_LDFLAGS from system
 # include different source and object files that are CPU specific

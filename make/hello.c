@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#include "pmu-and-marker.h"
+
 #define ICIALLU 0xE000EF50
 #define CCR     0xE000ED14    /* configuration and control reg */
 
@@ -62,10 +64,13 @@ __attribute__((noinline)) int mla(short *a, short *b, int length)
 int main()
 {
     short a[LENGTH], b[LENGTH];
+    int sum;
 
     (void) cache_init();
 
     printf("\nHello from Cortex-M55!\n\n");
+
+    (void) start_marker();
 
     // Test new instructions
     __asm volatile (
@@ -77,7 +82,12 @@ int main()
        );
 
     (void) init_arrays(a, b, LENGTH); 
-    printf("Sum is: %d\n", mla(a, b, LENGTH));
+    sum = mla(a, b, LENGTH);
+
+    (void) stop_marker();
+
+    printf("Sum is: %d\n", sum);
+
 
     return 0;
 }
